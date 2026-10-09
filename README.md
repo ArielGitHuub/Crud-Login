@@ -12,16 +12,16 @@
 
 ## 📑 Índice
 
-- [Descripción del Proyecto](#-descripción-del-proyecto)
-- [Estado del Proyecto](#-estado-del-proyecto)
-- [Características y Demostración](#️-características-y-demostración)
-- [Estructura del Proyecto (MVC)](#-estructura-del-proyecto-mvc)
-- [Tecnologías Utilizadas](#️-tecnologías-utilizadas)
-- [Acceso y Ejecución](#-acceso-y-ejecución)
-- [Credenciales por Defecto](#-credenciales-por-defecto)
-- [Demostración en Video](#-demostración-en-video)
-- [Desarrollador](#-desarrollador)
-- [Licencia](#-licencia)
+* [Descripción del Proyecto](#-descripción-del-proyecto)
+* [Estado del Proyecto](#-estado-del-proyecto)
+* [Características y Demostración](#️-características-y-demostración)
+* [Estructura del Proyecto (MVC)](#-estructura-del-proyecto-mvc)
+* [Tecnologías Utilizadas](#️-tecnologías-utilizadas)
+* [Acceso y Ejecución](#-acceso-y-ejecución)
+* [Credenciales por Defecto](#-credenciales-por-defecto)
+* [Demostración en Video](#-demostración-en-video)
+* [Desarrollador](#-desarrollador)
+* [Licencia](#-licencia)
 
 ---
 
@@ -43,14 +43,14 @@ El sistema aísla completamente las rutas protegidas a través de variables de s
 
 ## ⚙️ Características y Demostración
 
-- 🔐 **Autenticación Robusta:** Inicio de sesión con verificación de credenciales y encriptación de claves vía MD5.
-- 🛡️ **Guarda de Seguridad (Route Guard):** Restricción de acceso a la vista protegida (`index.php?action=crud`). Cualquier petición no autorizada redirige forzosamente al login.
-- 📊 **Operaciones CRUD Completas:**
-  - **Crear:** Registro de nuevos elementos en la base de datos mediante sentencias preparadas.
-  - **Leer:** Renderizado dinámico de la tabla con identificadores visuales secuenciales.
-  - **Actualizar:** Modificación de registros preexistentes manteniendo el contexto en el formulario.
-  - **Eliminar:** Borrado seguro de tuplas con confirmación en el navegador.
-- 🎨 **Interfaz Responsiva:** Diseño unificado en tonos claros y azules usando Tailwind CSS.
+* 🔐 **Autenticación Robusta:** Inicio de sesión con verificación de credenciales y encriptación de claves vía MD5.
+* 🛡️ **Guarda de Seguridad (Route Guard):** Restricción de acceso a la vista protegida (`index.php?action=crud`). Cualquier petición no autorizada redirige forzosamente al login.
+* 📊 **Operaciones CRUD Completas:**
+  * **Crear:** Registro de nuevos elementos en la base de datos mediante sentencias preparadas.
+  * **Leer:** Renderizado dinámico de la tabla con identificadores visuales secuenciales.
+  * **Actualizar:** Modificación de registros preexistentes manteniendo el contexto en el formulario.
+  * **Eliminar:** Borrado seguro de tuplas con confirmación en el navegador.
+* 🎨 **Interfaz Responsiva:** Diseño unificado en tonos claros y azules usando Tailwind CSS.
 
 ---
 
@@ -107,8 +107,10 @@ php -S localhost:8000
 Ingresa a la siguiente dirección:
 
 ```plaintext
-http://localhost:8000
+http://localhost:8000/index.php
 ```
+
+> **Nota:** La base de datos `data.sqlite` y el usuario inicial se generarán automáticamente la primera vez que se ejecute la aplicación.
 
 ---
 
@@ -119,6 +121,14 @@ http://localhost:8000
 | **Usuario**           | `admin`                            |
 | **Contraseña**        | `1234`                             |
 | **Hash MD5 guardado** | `81dc9bdb52d04dc20036dbd8313ed055` |
+
+---
+
+## 📹 Demostración en Video
+
+Visualiza la explicación del código, la protección de rutas y la funcionalidad completa del CRUD en el siguiente enlace:
+
+- 🎥 **Enlace al video explicativo:** [Ver en YouTube](https://youtu.be/acrYkLYtchI)
 
 ---
 
