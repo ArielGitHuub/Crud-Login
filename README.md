@@ -81,7 +81,7 @@ Abrir `http://localhost:8000`. No requiere dependencias (solo `pdo_sqlite`, incl
 PHP necesita un hosting con soporte PHP (el servidor interno `php -S` es solo para desarrollo). Subir el repositorio y asegurar que la carpeta del proyecto tenga permisos de escritura para `data.sqlite`.
 
 - **URL desplegada:** _(pendiente de completar)_
-- **Video explicativo:** _(pendiente de completar)_
+- **Video explicativo:** [Ver en YouTube](https://youtu.be/acrYkLYtchI)
 
 ## 👤 Autor
 
