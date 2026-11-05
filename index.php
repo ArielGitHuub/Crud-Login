@@ -5,6 +5,7 @@ require_once 'app/controllers/AuthController.php';
 require_once 'app/controllers/DashboardController.php';
 require_once 'app/controllers/MenuController.php';
 require_once 'app/controllers/PlatoController.php';
+require_once 'app/controllers/SucursalController.php';
 
 $db = (new Database())->connect();
 $action = $_GET['action'] ?? 'menu';
@@ -43,6 +44,16 @@ switch ($action) {
     case 'provincias':
         $controller = new PlatoController($db);
         $controller->provincias();
+        break;
+
+    case 'sucursales':
+        $controller = new SucursalController($db);
+        $controller->index();
+        break;
+
+    case 'ciudades':
+        $controller = new SucursalController($db);
+        $controller->ciudades();
         break;
 
     case 'platos':

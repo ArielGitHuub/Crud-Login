@@ -8,7 +8,7 @@ Stack: **PHP 8 nativo (patrón MVC)** · **SQLite (PDO)** · **Tailwind CSS (CDN
 
 ## ✨ Qué administra
 
-El administrador gestiona el **Catálogo de Platos** (CRUD completo), que es la base del core:
+El administrador gestiona dos módulos con CRUD completo: el **Catálogo de platos** (base del core) y las **Sucursales** (cada pedido pertenece a una sucursal).
 
 | Dato | Uso en el core |
 | --- | --- |
@@ -33,7 +33,9 @@ Los datos sensibles del core son **precios, costos y descuentos** (determinan la
 - Todo el acceso a BD usa sentencias preparadas (PDO).
 
 ### 2. Relaciones con dropdowns dependientes (sin claves foráneas manuales)
-Tablas `regiones` → `provincias` → `platos.provincia_id`.
+Tablas `regiones` → `provincias` → `ciudades`; `platos.provincia_id` y `sucursales.ciudad_id` apuntan a ellas.
+
+- **Sucursales:** cascada de 3 niveles Región → Provincia → Ciudad (`?action=ciudades&provincia_id=N`). Una sucursal con pedidos no se puede eliminar, solo desactivar.
 
 - El formulario tiene **Región** y **Provincia**: al escoger una región, el dropdown de provincias se carga vía `fetch` desde `index.php?action=provincias&region_id=N` (JSON).
 - El back-end **vuelve a verificar** que la provincia exista y pertenezca a la región elegida; la columna `platos.region` se deriva de la BD, no del formulario.
@@ -49,11 +51,11 @@ Código versionado en Git. Deploy: ver la sección *Deploy*.
 tarea3_mvc/
 ├── index.php                      # Front controller / router
 ├── data.sqlite                    # Base SQLite (se crea y migra sola)
-├── config/database.php            # PDO, esquema, migraciones y datos semilla
+├── assets/css/app.css             # Estilos del sitio y del panel\n├── config/database.php            # PDO, esquema, migraciones y datos semilla
 └── app/
-    ├── controllers/               # Auth, Dashboard, Menu, Plato (admin + validación)
+    ├── controllers/               # Auth, Dashboard, Menu, Plato y Sucursal (admin + validación)
     ├── models/                    # User, Plato, Pedido, Sucursal, Dashboard, Geografia
-    └── views/                     # login, menu, dashboard, plato_form
+    └── views/                     # login, menu, dashboard, plato_form, sucursal_form, partials/
 ```
 
 ## 🚀 Ejecución local

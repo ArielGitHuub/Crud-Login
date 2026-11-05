@@ -24,6 +24,19 @@ class Database {
             creado_en DATETIME DEFAULT CURRENT_TIMESTAMP
         )");
 
+        // Migración: bases creadas con la versión inicial (users solo con username/password)
+        $userCols = array_column($this->pdo->query("PRAGMA table_info(users)")->fetchAll(PDO::FETCH_ASSOC), 'name');
+        $nuevas = [
+            'nombre' => "TEXT NOT NULL DEFAULT ''", 'email' => 'TEXT',
+            'rol' => "TEXT DEFAULT 'usuario'", 'plan' => "TEXT DEFAULT 'free'", 'creado_en' => 'DATETIME',
+        ];
+        foreach ($nuevas as $col => $def) {
+            if (!in_array($col, $userCols)) {
+                $this->pdo->exec("ALTER TABLE users ADD COLUMN $col $def");
+            }
+        }
+        $this->pdo->exec("UPDATE users SET rol = 'admin', plan = 'pro', nombre = 'Ariel Tejada', email = 'admin@fuegoandino.ec' WHERE username = 'admin' AND (nombre IS NULL OR nombre = '')");
+
         // 2. Tabla Sucursales
         $this->pdo->exec("CREATE TABLE IF NOT EXISTS sucursales (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -96,6 +109,20 @@ class Database {
             FOREIGN KEY (region_id) REFERENCES regiones(id)
         )");
 
+        $this->pdo->exec("CREATE TABLE IF NOT EXISTS ciudades (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            provincia_id INTEGER NOT NULL,
+            nombre TEXT NOT NULL,
+            UNIQUE (provincia_id, nombre),
+            FOREIGN KEY (provincia_id) REFERENCES provincias(id)
+        )");
+
+        // Migración: sucursales.ciudad_id (la columna 'ciudad' se conserva sincronizada)
+        $sucCols = array_column($this->pdo->query("PRAGMA table_info(sucursales)")->fetchAll(PDO::FETCH_ASSOC), 'name');
+        if (!in_array('ciudad_id', $sucCols)) {
+            $this->pdo->exec("ALTER TABLE sucursales ADD COLUMN ciudad_id INTEGER REFERENCES ciudades(id)");
+        }
+
         // Migración: platos.provincia_id (la columna 'region' se conserva sincronizada para menú y dashboard)
         $cols = array_column($this->pdo->query("PRAGMA table_info(platos)")->fetchAll(PDO::FETCH_ASSOC), 'name');
         if (!in_array('provincia_id', $cols)) {
@@ -124,6 +151,26 @@ class Database {
             }
         }
 
+        if ($this->pdo->query("SELECT COUNT(*) FROM ciudades")->fetchColumn() == 0) {
+            $ciudades = [
+                'Pichincha' => ['Quito', 'Cayambe', 'Machachi'], 'Guayas' => ['Guayaquil', 'Daule', 'Milagro'],
+                'Azuay' => ['Cuenca', 'Gualaceo'], 'Manabí' => ['Portoviejo', 'Manta'],
+                'Imbabura' => ['Ibarra', 'Otavalo'], 'Cotopaxi' => ['Latacunga'],
+                'Tungurahua' => ['Ambato', 'Baños'], 'Chimborazo' => ['Riobamba'], 'Loja' => ['Loja'],
+                'Esmeraldas' => ['Esmeraldas', 'Atacames'], 'El Oro' => ['Machala'], 'Santa Elena' => ['Salinas'],
+                'Napo' => ['Tena'], 'Pastaza' => ['Puyo'], 'Morona Santiago' => ['Macas'],
+                'Orellana' => ['Francisco de Orellana'], 'Sucumbíos' => ['Nueva Loja'],
+            ];
+            $insC = $this->pdo->prepare("INSERT INTO ciudades (provincia_id, nombre) SELECT id, ? FROM provincias WHERE nombre = ?");
+            foreach ($ciudades as $prov => $lista) {
+                foreach ($lista as $c) {
+                    $insC->execute([$c, $prov]);
+                }
+            }
+        }
+        // Enlaza las sucursales existentes con su ciudad
+        $this->pdo->exec("UPDATE sucursales SET ciudad_id = (SELECT id FROM ciudades WHERE ciudades.nombre = sucursales.ciudad LIMIT 1) WHERE ciudad_id IS NULL");
+
         // Asigna provincia de origen a los platos que aún no la tienen
         $origen = [
             'Encebollado Mixto Especial' => 'Guayas', 'Seco de Chivo Tradicional' => 'Guayas',
@@ -141,14 +188,16 @@ class Database {
 
     private function seedInitialData() {
         // A. Usuarios iniciales
-        $userCount = $this->pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
-        if ($userCount == 0) {
-            $pass_admin = md5('1234');
-            $pass_user = md5('1234');
-            $this->pdo->exec("INSERT INTO users (username, nombre, email, password, rol, plan) VALUES 
-                ('admin', 'Ariel Tejada', 'admin@fuegoandino.ec', '$pass_admin', 'admin', 'pro'),
-                ('cliente_pro', 'Carlos Morales', 'carlos@udla.edu.ec', '$pass_user', 'usuario', 'pro'),
-                ('cliente_free', 'María Zambrano', 'maria@gmail.com', '$pass_user', 'usuario', 'free')");
+        $pass = md5('1234');
+        $demo = [
+            ['admin', 'Ariel Tejada', 'admin@fuegoandino.ec', 'admin', 'pro'],
+            ['cliente_pro', 'Carlos Morales', 'carlos@udla.edu.ec', 'usuario', 'pro'],
+            ['cliente_free', 'María Zambrano', 'maria@gmail.com', 'usuario', 'free'],
+        ];
+        $insU = $this->pdo->prepare("INSERT INTO users (username, nombre, email, password, rol, plan)
+            SELECT ?, ?, ?, ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = ?)");
+        foreach ($demo as [$u, $n, $e, $r, $p]) {
+            $insU->execute([$u, $n, $e, $pass, $r, $p, $u]);
         }
 
         // B. Sucursales iniciales
