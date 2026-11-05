@@ -30,6 +30,7 @@ require 'app/views/partials/admin_top.php';
     </div>
     <div class="card-body">
         <form method="POST" action="index.php?action=platos" id="platoForm" enctype="multipart/form-data" novalidate>
+            <?= csrf_field() ?>
             <input type="hidden" name="save_plato" value="1">
             <?php if ($editId): ?><input type="hidden" name="id" value="<?= (int)$editId ?>"><?php endif; ?>
 
@@ -63,7 +64,18 @@ require 'app/views/partials/admin_top.php';
                     </div>
                     <?= $msg('provincia_id') ?>
 
-                    <div class="field<?= $fe('descripcion') ?>" style="margin-top:16px">
+                    <div class="field<?= $fe('categoria_id') ?>" style="margin-top:16px">
+                        <label for="categoria_id">Categoría del menú</label>
+                        <select class="select" name="categoria_id" id="categoria_id">
+                            <option value="">Selecciona…</option>
+                            <?php foreach ($categorias as $c): ?>
+                                <option value="<?= $c['id'] ?>" <?= ($form['categoria_id'] ?? 0) == $c['id'] ? 'selected' : '' ?>><?= e($c['nombre']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <?= $msg('categoria_id') ?>
+                    </div>
+
+                    <div class="field<?= $fe('descripcion') ?>">
                         <label for="descripcion">Descripción</label>
                         <textarea class="textarea" id="descripcion" name="descripcion" rows="4"><?= htmlspecialchars($form['descripcion']) ?></textarea>
                         <?= $msg('descripcion') ?>
@@ -78,7 +90,7 @@ require 'app/views/partials/admin_top.php';
                     <div class="field<?= $fe('imagen') ?>">
                         <label for="imagen">Foto del plato</label>
                         <div class="upload">
-                            <img id="imgPreview" src="<?= htmlspecialchars($form['imagen'] ?? 'assets/img/platos/default.svg') ?>" alt="">
+                            <img id="imgPreview" src="<?= e(foto_plato($form['imagen'] ?? null)) ?>" alt="">
                             <div>
                                 <input type="file" id="imagen" name="imagen" accept="image/jpeg,image/png,image/webp">
                                 <div class="hint">JPG, PNG o WebP, máx. 2 MB. Si no subes una, se conserva la actual.</div>
@@ -162,13 +174,13 @@ require 'app/views/partials/admin_top.php';
                         <td class="muted"><?= $pl['id'] ?></td>
                         <td>
                             <div class="thumb-row">
-                                <img src="<?= htmlspecialchars($pl['imagen'] ?: 'assets/img/platos/default.svg') ?>" alt="">
+                                <img src="<?= e(foto_plato($pl['imagen'])) ?>" alt="">
                                 <b><?= htmlspecialchars($pl['nombre']) ?></b>
                             </div>
                         </td>
                         <td>
-                            <span class="tag <?= strtolower(strtr($pl['region'], ['í' => 'i'])) ?>"><?= htmlspecialchars($pl['region']) ?></span>
-                            <span class="muted"> · <?= htmlspecialchars($pl['provincia'] ?? 'Sin provincia') ?></span>
+                            <span class="tag <?= e(slug_region($pl['region'])) ?>"><?= htmlspecialchars($pl['region']) ?></span>
+                            <span class="muted"> · <?= e($pl['provincia'] ?? 'Sin provincia') ?> · <?= e($pl['categoria'] ?? 'Sin categoría') ?></span>
                         </td>
                         <td class="num">$<?= number_format($pl['precio'], 2) ?></td>
                         <td class="num muted">$<?= number_format($pl['costo'], 2) ?></td>
@@ -178,6 +190,7 @@ require 'app/views/partials/admin_top.php';
                             <div class="row-actions">
                                 <a href="index.php?action=platos&edit_id=<?= $pl['id'] ?>">Editar</a>
                                 <form method="POST" action="index.php?action=platos" onsubmit="return confirm('¿Eliminar este plato del catálogo?');">
+                                    <?= csrf_field() ?>
                                     <input type="hidden" name="delete_plato" value="1">
                                     <input type="hidden" name="id" value="<?= $pl['id'] ?>">
                                     <button type="submit" class="link-danger">Eliminar</button>

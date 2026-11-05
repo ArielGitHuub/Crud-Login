@@ -1,6 +1,4 @@
 <?php
-require_once 'app/models/User.php';
-
 class AuthController {
     private $userModel;
 
@@ -8,72 +6,54 @@ class AuthController {
         $this->userModel = new User($db);
     }
 
+    // La pantalla de entrada del sitio: siempre se muestra, aunque ya haya una sesión abierta
     public function login() {
+        $error = null;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $user = $this->userModel->login($_POST['username'], $_POST['password']);
+            $user = $this->userModel->login(trim($_POST['username'] ?? ''), $_POST['password'] ?? '');
             if ($user) {
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['nombre'] = $user['nombre'];
-                $_SESSION['rol'] = $user['rol'];
-                $_SESSION['plan'] = $user['plan'];
-
-                // Redirigir según rol
-                if ($user['rol'] === 'admin') {
-                    header('Location: index.php?action=dashboard');
-                } else {
-                    header('Location: index.php?action=menu');
-                }
-                exit;
-            } else {
-                $error = "Credenciales incorrectas. Intenta con admin / 1234 o usa los botones de acceso rápido.";
-                require 'app/views/login.php';
-                return;
+                $this->iniciarSesion($user);
             }
+            $error = 'Usuario o contraseña incorrectos.';
         }
         require 'app/views/login.php';
     }
 
+    // Acceso rápido por rol para la demostración (solo para desarrollo; quitar en producción)
     public function quickSwitch() {
-        $target = $_GET['role'] ?? 'admin';
-        $user = null;
+        $cuentas = ['admin' => 'admin', 'pro' => 'cliente_pro', 'free' => 'cliente_free'];
+        $rol = $_GET['role'] ?? 'admin';
 
-        if ($target === 'admin') {
-            $user = $this->userModel->login('admin', '1234');
-        } elseif ($target === 'pro') {
-            $user = $this->userModel->login('cliente_pro', '1234');
-        } elseif ($target === 'free') {
-            $user = $this->userModel->login('cliente_free', '1234');
-        } elseif ($target === 'invitado') {
-            session_destroy();
-            session_start();
+        if ($rol === 'invitado') {
+            $_SESSION = [];
+            session_regenerate_id(true);
             $_SESSION['rol'] = 'invitado';
             $_SESSION['plan'] = 'free';
-            $_SESSION['nombre'] = 'Visitante Invitado';
-            header('Location: index.php?action=menu');
-            exit;
+            $_SESSION['nombre'] = 'Visitante';
+            redirect('inicio');
         }
-
-        if ($user) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['nombre'] = $user['nombre'];
-            $_SESSION['rol'] = $user['rol'];
-            $_SESSION['plan'] = $user['plan'];
+        $user = isset($cuentas[$rol]) ? $this->userModel->login($cuentas[$rol], '1234') : null;
+        if (!$user) {
+            redirect('login');
         }
-
-        if (($user['rol'] ?? '') === 'admin') {
-            header('Location: index.php?action=dashboard');
-        } else {
-            header('Location: index.php?action=menu');
-        }
-        exit;
+        $this->iniciarSesion($user);
     }
 
     public function logout() {
+        $_SESSION = [];
         session_destroy();
-        header('Location: index.php?action=login');
-        exit;
+        redirect('login');
+    }
+
+    private function iniciarSesion(array $user): void {
+        session_regenerate_id(true); // evita fijación de sesión
+        $_SESSION = [
+            'user_id' => $user['id'],
+            'username' => $user['username'],
+            'nombre' => $user['nombre'],
+            'rol' => $user['rol'],
+            'plan' => $user['plan'],
+        ];
+        redirect($user['rol'] === 'admin' ? 'dashboard' : 'inicio');
     }
 }
-?>

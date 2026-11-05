@@ -6,7 +6,8 @@ class Pedido {
         $this->db = $db; 
     }
 
-    public function create($usuarioId, $sucursalId, $items, $isPro = false) {
+    // $estado y $fecha solo se pasan al generar datos de ejemplo; en un pedido real son 'Entregado' y ahora
+    public function create($usuarioId, $sucursalId, $items, $isPro = false, $estado = 'Entregado', $fecha = null) {
         $subtotal = 0.0;
         $costoTotal = 0.0;
 
@@ -33,8 +34,8 @@ class Pedido {
         $ganancia = round($total - $costoTotal, 2);
 
         $stmt = $this->db->prepare("INSERT INTO pedidos (usuario_id, sucursal_id, subtotal, descuento, envio, total, costo_total, ganancia, estado, fecha) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Entregado', datetime('now', 'localtime'))");
-        $stmt->execute([$usuarioId, $sucursalId, $subtotal, $descuento, $envio, $total, $costoTotal, $ganancia]);
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, COALESCE(?, datetime('now', 'localtime')))");
+        $stmt->execute([$usuarioId, $sucursalId, $subtotal, $descuento, $envio, $total, $costoTotal, $ganancia, $estado, $fecha]);
         $pedidoId = $this->db->lastInsertId();
 
         $stmtDet = $this->db->prepare("INSERT INTO detalle_pedidos (pedido_id, plato_id, cantidad, precio_unitario, costo_unitario) 

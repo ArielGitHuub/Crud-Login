@@ -1,136 +1,99 @@
 <?php
-$regionClass = fn($r) => strtolower(strtr($r, ['í' => 'i']));
-$regiones = [
-    '' => 'Todas',
-    'Costa' => 'Costa',
-    'Sierra' => 'Sierra',
-    'Amazonía' => 'Amazonía',
-];
-$q = fn(array $extra) => 'index.php?' . http_build_query(array_filter(['action' => 'menu', 'sucursal_id' => $sucursalId] + $extra));
-?><!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú por región · Fuego Andino</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/svg+xml" href="assets/img/logo.svg">
-    <link rel="stylesheet" href="assets/css/app.css">
-</head>
-<body>
-
-<header class="site-nav">
-    <div class="in">
-        <a class="logo" href="index.php?action=menu"><img src="assets/img/logo.svg" alt="">Fuego <em>Andino</em></a>
-        <nav class="links">
-            <a class="active" href="index.php?action=menu">Menú</a>
-            <?php if (($userRol ?? '') === 'admin'): ?>
-                <a href="index.php?action=dashboard">Panel de administración</a>
-            <?php endif; ?>
-        </nav>
-        <div class="who">
-            <span class="plan-chip <?= $isPro ? 'pro' : '' ?>"><?= $isPro ? 'Plan Pro' : 'Plan Free' ?></span>
-            &nbsp;<b><?= htmlspecialchars($_SESSION['nombre'] ?? 'Invitado') ?></b>
-            &nbsp;·&nbsp;<a href="index.php?action=login">Cambiar de cuenta</a>
-        </div>
-    </div>
-</header>
-
-<section class="hero">
-    <div class="in">
-        <h1>Cocina ecuatoriana, de la costa a la Amazonía.</h1>
-        <p>Platos tradicionales de cada región, preparados en nuestras sucursales. Elige tu local y pide.</p>
-    </div>
-</section>
+$pageTitle = 'Menú';
+$ghosts = array_values(array_filter(array_column($platos ?: [], 'imagen')));
+$params = ['action' => 'menu', 'sucursal_id' => $sucursalId];
+$urlBase = fn(array $extra = []) => 'index.php?' . http_build_query($params + $extra) . '#platos';
+require 'app/views/partials/site_top.php';
+?>
 
 <div class="wrap">
+    <h1 class="page-title">Menú</h1>
 
-    <?php if ($mensajePedido): ?>
-        <div class="alert ok">
-            <?= htmlspecialchars($mensajePedido['texto']) ?>
-            <?php if (($userRol ?? '') === 'admin'): ?> <a href="index.php?action=dashboard">Ver en el dashboard</a><?php endif; ?>
-        </div>
-    <?php endif; ?>
-
-    <div class="benefit">
-        <div>
-            <b><?= $isPro ? 'Beneficios Pro activos' : 'Plan Pro: descuento y envío gratis' ?></b>
-            <span>
-                <?php if ($isPro): ?>
-                    Descuento en platos seleccionados y envío gratis en todos tus pedidos.
-                <?php else: ?>
-                    Pagas precio regular y $2.50 de envío. <a href="index.php?action=switch_user&role=pro">Activar plan Pro (simulado)</a>
-                <?php endif; ?>
-            </span>
-        </div>
-        <b><?= $isPro ? 'Envío $0.00' : 'Envío $2.50' ?></b>
+    <div class="tiles">
+        <?php foreach (Plato::REGIONES as $r): $d = $resumen['regiones'][$r] ?? null; ?>
+            <a class="tile <?= $region === $r ? 'on' : '' ?>" href="<?= e($urlBase(['region' => $r])) ?>">
+                <img src="<?= e(foto_plato($d['imagen'] ?? null)) ?>" alt="" loading="lazy">
+                <span><?= e($r) ?><small><?= (int)($d['total'] ?? 0) ?> platos</small></span>
+            </a>
+        <?php endforeach; ?>
+        <?php foreach ($resumen['categorias'] as $c): ?>
+            <a class="tile <?= $categoriaId === (int)$c['id'] ? 'on' : '' ?>" href="<?= e($urlBase(['categoria' => $c['id']])) ?>">
+                <img src="<?= e(foto_plato($c['imagen'])) ?>" alt="" loading="lazy">
+                <span><?= e($c['nombre']) ?><small><?= (int)$c['total'] ?> platos</small></span>
+            </a>
+        <?php endforeach; ?>
+        <a class="tile pro" href="#beneficios"><b>Pro</b><span>Descuentos y envío gratis</span></a>
     </div>
 
-    <div class="toolbar">
-        <nav class="tabs">
-            <?php foreach ($regiones as $valor => $etiqueta): ?>
-                <a class="<?= ((string)$region === (string)$valor) ? 'active' : '' ?>" href="<?= $q($valor ? ['region' => $valor] : []) ?>">
-                    <?= $etiqueta ?><?php if ($valor): ?><small><?= $conteoRegiones[$valor] ?? 0 ?></small><?php endif; ?>
-                </a>
-            <?php endforeach; ?>
-        </nav>
-        <div class="field" style="margin:0;min-width:240px">
+    <section id="platos">
+        <div class="results-head">
+            <div>
+                <h2><?= e($titulo) ?></h2>
+                <p><?= count($platos) ?> platos · <a href="<?= e($urlBase()) ?>">ver todo el menú</a></p>
+            </div>
             <select class="select" aria-label="Sucursal"
-                    onchange="window.location.href='index.php?action=menu<?= $region ? '&region=' . urlencode($region) : '' ?>&sucursal_id=' + this.value">
-                <?php foreach ($sucursales as $suc): ?>
-                    <option value="<?= $suc['id'] ?>" <?= ($sucursalId == $suc['id']) ? 'selected' : '' ?>><?= htmlspecialchars($suc['nombre']) ?></option>
+                    onchange="location.href = <?= e(json_encode('index.php?' . http_build_query(array_filter(['action' => 'menu', 'region' => $region, 'categoria' => $categoriaId]) ) . '&sucursal_id=')) ?> + this.value + '#platos'">
+                <?php foreach ($sucursales as $s): ?>
+                    <option value="<?= $s['id'] ?>" <?= $sucursalId == $s['id'] ? 'selected' : '' ?>><?= e($s['nombre']) ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
-    </div>
 
-    <?php if (!$platos): ?>
-        <div class="empty">No hay platos disponibles en esta región por ahora.</div>
-    <?php else: ?>
-    <div class="dishes">
-        <?php foreach ($platos as $pl):
-            $precioRegular = (float)$pl['precio'];
-            $descuento = (float)$pl['descuento_pro'];
-            $precioPro = $precioRegular * (1 - $descuento / 100);
-        ?>
-            <article class="dish <?= $regionClass($pl['region']) ?>">
-                <img class="photo" src="<?= htmlspecialchars($pl['imagen'] ?: 'assets/img/platos/default.svg') ?>" alt="<?= htmlspecialchars($pl['nombre']) ?>" loading="lazy">
-                <div class="stripe"></div>
-                <div class="body">
-                    <div class="origin"><?= htmlspecialchars($pl['region']) ?><?= !empty($pl['provincia']) ? ' · ' . htmlspecialchars($pl['provincia']) : '' ?></div>
-                    <h3><?= htmlspecialchars($pl['nombre']) ?></h3>
-                    <p class="desc"><?= htmlspecialchars($pl['descripcion']) ?></p>
-                    <p class="ing"><?= htmlspecialchars(implode(', ', array_slice(array_map('trim', explode(',', $pl['ingredientes'])), 0, 4))) ?></p>
-                </div>
-                <div class="foot">
-                    <div class="price-row">
-                        <div class="price">
-                            <?php if ($isPro): ?>
-                                <s>$<?= number_format($precioRegular, 2) ?></s>$<?= number_format($precioPro, 2) ?>
-                            <?php else: ?>
-                                $<?= number_format($precioRegular, 2) ?>
-                            <?php endif; ?>
-                        </div>
-                        <small><?= $isPro ? '−' . (int)$descuento . '% Pro' : 'Con Pro: $' . number_format($precioPro, 2) ?></small>
-                    </div>
-                    <?php if (empty($_SESSION['user_id'])): ?>
-                        <a class="btn" href="index.php?action=login">Inicia sesión para pedir</a>
+        <div id="pedidos"><?php if ($mensajePedido): ?><div class="alert ok"><?= e($mensajePedido) ?><?= es_admin() ? ' <a href="index.php?action=dashboard">Ver en el dashboard</a>' : '' ?></div><?php endif; ?></div>
+
+        <div class="benefit" id="beneficios">
+            <div>
+                <b><?= $isPro ? 'Beneficios Pro activos' : 'Plan Pro: descuentos y envío gratis' ?></b>
+                <span>
+                    <?php if ($isPro): ?>
+                        Pagas el precio Pro de cada plato y tu envío es gratis.
                     <?php else: ?>
-                    <form method="POST" action="index.php?action=ordenar" class="order">
-                        <input type="hidden" name="plato_id" value="<?= $pl['id'] ?>">
-                        <input type="hidden" name="sucursal_id" value="<?= $sucursalId ?>">
-                        <input class="input qty" type="number" name="cantidad" value="1" min="1" max="20" aria-label="Cantidad">
-                        <button type="submit" class="btn primary">Pedir</button>
-                    </form>
+                        Hoy pagas precio regular y $2.50 de envío. <a href="index.php?action=switch_user&role=pro">Activar plan Pro (simulado)</a>
                     <?php endif; ?>
-                </div>
-            </article>
-        <?php endforeach; ?>
-    </div>
-    <?php endif; ?>
+                </span>
+            </div>
+            <b><?= $isPro ? 'Envío $0.00' : 'Envío $2.50' ?></b>
+        </div>
+
+        <?php if (!$platos): ?>
+            <div class="empty">Aún no hay platos en esta selección.</div>
+        <?php else: ?>
+        <div class="dishes">
+            <?php foreach ($platos as $pl):
+                $precioPro = $pl['precio'] * (1 - $pl['descuento_pro'] / 100);
+            ?>
+                <article class="dish <?= e(slug_region($pl['region'])) ?>">
+                    <img class="photo" src="<?= e(foto_plato($pl['imagen'])) ?>" alt="<?= e($pl['nombre']) ?>" loading="lazy">
+                    <div class="body">
+                        <div class="origin"><i></i><?= e($pl['region']) ?><?= $pl['provincia'] ? ' · ' . e($pl['provincia']) : '' ?></div>
+                        <h3><?= e($pl['nombre']) ?></h3>
+                        <p class="desc"><?= e($pl['descripcion']) ?></p>
+                    </div>
+                    <div class="foot">
+                        <div class="price-row">
+                            <div class="price">
+                                <?php if ($isPro): ?><s><?= dinero($pl['precio']) ?></s><?= dinero($precioPro) ?>
+                                <?php else: ?><?= dinero($pl['precio']) ?><?php endif; ?>
+                            </div>
+                            <small><?= $isPro ? '−' . (int)$pl['descuento_pro'] . '% Pro' : 'Con Pro: ' . dinero($precioPro) ?></small>
+                        </div>
+                        <?php if (empty($_SESSION['user_id'])): ?>
+                            <a class="btn" href="index.php?action=login">Inicia sesión para pedir</a>
+                        <?php else: ?>
+                            <form method="POST" action="index.php?action=ordenar" class="order">
+                                <?= csrf_field() ?>
+                                <input type="hidden" name="plato_id" value="<?= $pl['id'] ?>">
+                                <input type="hidden" name="sucursal_id" value="<?= $sucursalId ?>">
+                                <input class="input qty" type="number" name="cantidad" value="1" min="1" max="20" aria-label="Cantidad">
+                                <button type="submit" class="btn primary">Pedir</button>
+                            </form>
+                        <?php endif; ?>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+    </section>
 </div>
 
-<footer class="site-foot">Fuego Andino · Proyecto académico de Ingeniería Web, UDLA</footer>
-</body>
-</html>
+<?php require 'app/views/partials/site_bottom.php'; ?>

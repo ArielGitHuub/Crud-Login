@@ -27,6 +27,7 @@ require 'app/views/partials/admin_top.php';
     </div>
     <div class="card-body">
         <form method="POST" action="index.php?action=sucursales" novalidate>
+            <?= csrf_field() ?>
             <input type="hidden" name="save_sucursal" value="1">
             <?php if ($editId): ?><input type="hidden" name="id" value="<?= (int)$editId ?>"><?php endif; ?>
 
@@ -115,6 +116,7 @@ require 'app/views/partials/admin_top.php';
                             <div class="row-actions">
                                 <a href="index.php?action=sucursales&edit_id=<?= $s['id'] ?>">Editar</a>
                                 <form method="POST" action="index.php?action=sucursales" onsubmit="return confirm('¿Eliminar esta sucursal?');">
+                                    <?= csrf_field() ?>
                                     <input type="hidden" name="delete_sucursal" value="1">
                                     <input type="hidden" name="id" value="<?= $s['id'] ?>">
                                     <button type="submit" class="link-danger">Eliminar</button>

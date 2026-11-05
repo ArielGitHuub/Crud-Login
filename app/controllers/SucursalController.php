@@ -1,15 +1,12 @@
 <?php
-require_once 'app/models/Sucursal.php';
-require_once 'app/models/Geografia.php';
-
+/** Administración de sucursales (solo rol admin). */
 class SucursalController {
     private $sucursalModel;
     private $geoModel;
 
     public function __construct($db) {
-        if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
-            header('Location: index.php?action=login&error=unauthorized');
-            exit;
+        if (!es_admin()) {
+            redirect('login', ['error' => 'unauthorized']);
         }
         $this->sucursalModel = new Sucursal($db);
         $this->geoModel = new Geografia($db);
@@ -70,13 +67,12 @@ class SucursalController {
                 if (!$errors) {
                     if ($id) {
                         $this->sucursalModel->update($id, $data);
-                        $_SESSION['flash_message'] = 'Sucursal actualizada.';
+                        flash('ok', 'Sucursal actualizada.');
                     } else {
                         $this->sucursalModel->create($data);
-                        $_SESSION['flash_message'] = 'Sucursal registrada.';
+                        flash('ok', 'Sucursal registrada.');
                     }
-                    header('Location: index.php?action=sucursales');
-                    exit;
+                    redirect('sucursales');
                 }
                 $form = $data;
                 $editId = $id;
@@ -84,13 +80,12 @@ class SucursalController {
                 $id = (int)$_POST['id'];
                 if ($this->sucursalModel->tienePedidos($id)) {
                     // Integridad: una sucursal con ventas solo puede desactivarse
-                    $_SESSION['flash_error'] = 'No se puede eliminar: la sucursal tiene pedidos registrados. Márcala como inactiva.';
+                    flash('error', 'No se puede eliminar: la sucursal tiene pedidos registrados. Márcala como inactiva.');
                 } else {
                     $this->sucursalModel->delete($id);
-                    $_SESSION['flash_message'] = 'Sucursal eliminada.';
+                    flash('ok', 'Sucursal eliminada.');
                 }
-                header('Location: index.php?action=sucursales');
-                exit;
+                redirect('sucursales');
             }
         }
 
@@ -109,9 +104,8 @@ class SucursalController {
         $ciudades = $form['provincia_id'] ? $this->geoModel->getCiudadesByProvincia($form['provincia_id']) : [];
         $sucursales = $this->sucursalModel->getAllAdmin();
 
-        $flashMessage = $_SESSION['flash_message'] ?? null;
-        $flashError = $_SESSION['flash_error'] ?? null;
-        unset($_SESSION['flash_message'], $_SESSION['flash_error']);
+        $flashMessage = flash('ok');
+        $flashError = flash('error');
 
         require 'app/views/sucursal_form.php';
     }

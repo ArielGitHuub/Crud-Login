@@ -1,8 +1,5 @@
 <?php
-require_once 'app/models/Plato.php';
-require_once 'app/models/Sucursal.php';
-require_once 'app/models/Pedido.php';
-
+/** Menú público por región/categoría y registro de pedidos de los clientes. */
 class MenuController {
     private $platoModel;
     private $sucursalModel;
@@ -15,70 +12,65 @@ class MenuController {
     }
 
     public function index() {
-        $region = $_GET['region'] ?? null;
-        $sucursalId = $_GET['sucursal_id'] ?? 1;
-
-        // Platos filtrados por región
-        $platos = $this->platoModel->getAll(true, $region);
         $sucursales = $this->sucursalModel->getAll();
-        $conteoRegiones = $this->platoModel->countByRegion();
 
-        $userPlan = $_SESSION['plan'] ?? 'free';
-        $userRol = $_SESSION['rol'] ?? 'invitado';
-        $isPro = ($userPlan === 'pro');
+        $region = in_array($_GET['region'] ?? '', Plato::REGIONES, true) ? $_GET['region'] : null;
+        $categoriaId = (int)($_GET['categoria'] ?? 0) ?: null;
+        $sucursalId = (int)($_GET['sucursal_id'] ?? ($sucursales[0]['id'] ?? 0));
 
-        $mensajePedido = $_SESSION['mensaje_pedido'] ?? null;
-        unset($_SESSION['mensaje_pedido']);
+        $platos = $this->platoModel->getAll(true, $region, $categoriaId);
+        $resumen = $this->platoModel->getResumen();
 
+        // Título de la selección actual
+        $titulo = 'Todo el menú';
+        if ($region) {
+            $titulo = $region;
+        } elseif ($categoriaId) {
+            foreach ($resumen['categorias'] as $c) {
+                if ((int)$c['id'] === $categoriaId) {
+                    $titulo = $c['nombre'];
+                }
+            }
+        }
+
+        $isPro = (($_SESSION['plan'] ?? 'free') === 'pro');
+        $mensajePedido = flash('pedido');
+
+        $pagina = 'menu';
         require 'app/views/menu.php';
     }
 
     public function ordenar() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $userId = $_SESSION['user_id'] ?? null;
-            // Solo usuarios registrados pueden pedir (los invitados únicamente consultan el menú)
-            if (!$userId) {
-                header('Location: index.php?action=login');
-                exit;
-            }
-
-            $sucursalId = (int)($_POST['sucursal_id'] ?? 0);
-            $platoId = (int)($_POST['plato_id'] ?? 0);
-            $cantidad = (int)($_POST['cantidad'] ?? 1);
-            $cantidad = max(1, min(20, $cantidad));
-
-            // Precios y costos salen siempre de la base de datos, nunca del formulario
-            $plato = $this->platoModel->getById($platoId);
-            $sucursal = $this->sucursalModel->getById($sucursalId);
-            if (!$plato || !$plato['activo'] || !$sucursal || !$sucursal['activa']) {
-                header('Location: index.php?action=menu');
-                exit;
-            }
-
-            $isPro = (($_SESSION['plan'] ?? 'free') === 'pro');
-
-            $items = [
-                [
-                    'plato_id' => $plato['id'],
-                    'cantidad' => $cantidad,
-                    'precio' => (float)$plato['precio'],
-                    'costo' => (float)$plato['costo'],
-                    'descuento_pro' => (float)$plato['descuento_pro']
-                ]
-            ];
-
-            $pedidoId = $this->pedidoModel->create($userId, $sucursalId, $items, $isPro);
-
-            $_SESSION['mensaje_pedido'] = [
-                'tipo' => 'exito',
-                'texto' => "¡Pedido N°{$pedidoId} registrado exitosamente! Se procesó para la sucursal seleccionada con los beneficios de tu cuenta (" . ($isPro ? "descuento Pro y envío gratis" : "cuenta Free, envío $2.50") . ")."
-            ];
-
-            header('Location: index.php?action=menu');
-            exit;
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            redirect('menu');
         }
-        header('Location: index.php?action=menu');
-        exit;
+        // Solo usuarios registrados pueden pedir (los invitados únicamente consultan el menú)
+        $userId = $_SESSION['user_id'] ?? null;
+        if (!$userId) {
+            redirect('login');
+        }
+
+        $sucursalId = (int)($_POST['sucursal_id'] ?? 0);
+        $cantidad = max(1, min(20, (int)($_POST['cantidad'] ?? 1)));
+
+        // Precios y costos salen siempre de la base de datos, nunca del formulario
+        $plato = $this->platoModel->getById((int)($_POST['plato_id'] ?? 0));
+        $sucursal = $this->sucursalModel->getById($sucursalId);
+        if (!$plato || !$plato['activo'] || !$sucursal || !$sucursal['activa']) {
+            redirect('menu');
+        }
+
+        $isPro = (($_SESSION['plan'] ?? 'free') === 'pro');
+        $pedidoId = $this->pedidoModel->create($userId, $sucursalId, [[
+            'plato_id' => $plato['id'],
+            'cantidad' => $cantidad,
+            'precio' => (float)$plato['precio'],
+            'costo' => (float)$plato['costo'],
+            'descuento_pro' => (float)$plato['descuento_pro'],
+        ]], $isPro);
+
+        flash('pedido', "¡Pedido N.º $pedidoId registrado! {$cantidad} × {$plato['nombre']} en {$sucursal['nombre']} ("
+            . ($isPro ? 'descuento Pro y envío gratis' : 'cuenta Free, envío $2.50') . ').');
+        redirect('menu', ['sucursal_id' => $sucursalId], 'pedidos');
     }
 }
-?>

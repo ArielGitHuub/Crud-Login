@@ -61,7 +61,7 @@ require 'app/views/partials/admin_top.php';
 <div class="charts">
     <div class="chart-card wide">
         <h3>¿Cuánto vendemos y cuánto ganamos?</h3>
-        <p class="why">Cada grupo de barras es un <?= $periodo === 'hoy' ? 'hora' : 'día' ?>. La barra verde es lo que queda después de restar el costo de los platos.</p>
+        <p class="why">Cada grupo de barras es un <?= $periodo === 'hoy' ? 'hora' : 'día' ?>. La barra dorada es lo que queda después de restar el costo de los platos.</p>
         <div class="chart-box"><canvas id="cSerie"></canvas></div>
     </div>
     <div class="chart-card">
@@ -115,7 +115,7 @@ require 'app/views/partials/admin_top.php';
     const COMPARADO = <?= json_encode($comparado) ?>;
     let datos = <?= json_encode($paquete, JSON_UNESCAPED_UNICODE) ?>;
 
-    const C = { marca: '#9a3412', verde: '#2f6b3a', tinta: '#2b211c', suave: '#6b5d54', costa: '#2a7a86', sierra: '#b0701c', amazonia: '#3f7d3a', claro: '#e4dccf' };
+    const C = { marca: '#1f5a3f', oro: '#e8a92e', suave: '#5c6b62', costa: '#2a8a99', sierra: '#c4852a', amazonia: '#4f9a45', claro: '#e6e2cf' };
     Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
     Chart.defaults.color = C.suave;
     Chart.defaults.maintainAspectRatio = false;
@@ -137,7 +137,7 @@ require 'app/views/partials/admin_top.php';
 
     const gSerie = mk('cSerie', { type: 'bar', data: { labels: [], datasets: [
         { label: 'Ventas', data: [], backgroundColor: C.marca, borderRadius: 3 },
-        { label: 'Ganancia', data: [], backgroundColor: C.verde, borderRadius: 3 } ] },
+        { label: 'Ganancia', data: [], backgroundColor: C.oro, borderRadius: 3 } ] },
         options: { scales: { x: sinGrid, y: ejeDinero }, plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + dinero(c.parsed.y) } } } } });
 
     const opcionesBarras = { indexAxis: 'y', scales: { x: { beginAtZero: true, grid: { color: C.claro }, ticks: { precision: 0 } }, y: sinGrid },
@@ -145,7 +145,7 @@ require 'app/views/partials/admin_top.php';
     const gTop = mk('cTop', { type: 'bar', data: { labels: [], datasets: [{ data: [], backgroundColor: [], borderRadius: 3 }] }, options: opcionesBarras });
     const gBottom = mk('cBottom', { type: 'bar', data: { labels: [], datasets: [{ data: [], backgroundColor: [], borderRadius: 3 }] }, options: opcionesBarras });
 
-    const gClientes = mk('cClientes', { type: 'doughnut', data: { labels: ['Sin plan (Free)', 'Con plan Pro'], datasets: [{ data: [0, 0], backgroundColor: ['#c9bfae', C.marca], borderWidth: 0 }] },
+    const gClientes = mk('cClientes', { type: 'doughnut', data: { labels: ['Sin plan (Free)', 'Con plan Pro'], datasets: [{ data: [0, 0], backgroundColor: ['#cfcbb0', C.marca], borderWidth: 0 }] },
         options: { cutout: '62%', plugins: { legend: { position: 'bottom' } } } });
 
     const gSuc = mk('cSucursales', { type: 'bar', data: { labels: [], datasets: [{ label: 'Ventas', data: [], backgroundColor: C.marca, borderRadius: 3 }] },

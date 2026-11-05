@@ -69,8 +69,8 @@ class Dashboard {
                 COALESCE(SUM(plan = 'free'), 0) AS free, COALESCE(SUM(plan = 'pro'), 0) AS pro
             FROM users WHERE rol = 'usuario'")->fetch(PDO::FETCH_ASSOC);
 
-        $ventas = (float)$act['ventas'];
-        $ganancia = (float)$act['ganancia'];
+        $ventas = round((float)$act['ventas'], 2);
+        $ganancia = round((float)$act['ganancia'], 2);
         return [
             'ventas_totales' => $ventas,
             'ganancia_total' => $ganancia,
