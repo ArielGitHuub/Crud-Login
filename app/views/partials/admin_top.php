@@ -13,14 +13,16 @@ $nav = [
     <title><?= htmlspecialchars($pageTitle) ?> · Fuego Andino</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="assets/img/logo.svg">
     <link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body>
 <div class="admin">
     <aside class="sidebar">
         <div class="brand">
-            <strong>Fuego Andino</strong>
-            <small>Administración</small>
+            <img src="assets/img/logo.svg" alt="" width="34" height="34">
+            <div><strong>Fuego Andino</strong>
+            <small>Administración</small></div>
         </div>
         <nav>
             <div class="group">Gestión</div>

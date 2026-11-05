@@ -101,6 +101,38 @@ class PlatoController {
         return [$data, $errors];
     }
 
+    // Valida y guarda la foto subida. Back-End: tamaño, tipo real del contenido (no la extensión) y dimensiones.
+    // Devuelve [ruta|null, error|null]; sin archivo devuelve [null, null] y se conserva la imagen actual.
+    private function guardarImagen(?array $file) {
+        if (!$file || ($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+            return [null, null];
+        }
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            return [null, 'No se pudo subir la imagen (error ' . $file['error'] . ').'];
+        }
+        if ($file['size'] > 2 * 1024 * 1024) {
+            return [null, 'La imagen no puede superar los 2 MB.'];
+        }
+        $info = @getimagesize($file['tmp_name']);
+        $tipos = [IMAGETYPE_JPEG => 'jpg', IMAGETYPE_PNG => 'png', IMAGETYPE_WEBP => 'webp'];
+        if (!$info || !isset($tipos[$info[2]])) {
+            return [null, 'Formato no permitido: usa JPG, PNG o WebP.'];
+        }
+        if ($info[0] < 200 || $info[1] < 150 || $info[0] > 4000 || $info[1] > 4000) {
+            return [null, 'Dimensiones no válidas: mínimo 200×150 px y máximo 4000×4000 px.'];
+        }
+
+        $dir = 'assets/img/platos/subidas';
+        if (!is_dir($dir)) {
+            mkdir($dir, 0775, true);
+        }
+        $ruta = $dir . '/' . bin2hex(random_bytes(8)) . '.' . $tipos[$info[2]]; // nombre aleatorio: nunca el del cliente
+        if (!move_uploaded_file($file['tmp_name'], $ruta)) {
+            return [null, 'No se pudo guardar la imagen en el servidor.'];
+        }
+        return [$ruta, null];
+    }
+
     public function index() {
         $errors = [];
         $form = null;
@@ -110,6 +142,14 @@ class PlatoController {
             if (isset($_POST['save_plato'])) {
                 $id = !empty($_POST['id']) ? (int)$_POST['id'] : null;
                 [$data, $errors] = $this->validar($_POST, $id);
+
+                if (!$errors) {
+                    [$ruta, $errImg] = $this->guardarImagen($_FILES['imagen'] ?? null);
+                    if ($errImg) {
+                        $errors['imagen'] = $errImg;
+                    }
+                    $data['imagen'] = $ruta;
+                }
 
                 if (!$errors) {
                     if ($id) {
@@ -138,6 +178,7 @@ class PlatoController {
 
         if ($form === null) {
             $form = $platoToEdit ?: [
+                'imagen' => null,
                 'nombre' => '', 'provincia_id' => 0, 'precio' => '6.50', 'costo' => '2.90',
                 'descuento_pro' => '20', 'activo' => 1, 'descripcion' => '', 'ingredientes' => '',
                 'tiempo_preparacion' => '00:15 hrs',

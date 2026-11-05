@@ -29,7 +29,7 @@ require 'app/views/partials/admin_top.php';
         <?php if ($editId): ?><a class="btn small" href="index.php?action=platos">Crear uno nuevo</a><?php endif; ?>
     </div>
     <div class="card-body">
-        <form method="POST" action="index.php?action=platos" id="platoForm" novalidate>
+        <form method="POST" action="index.php?action=platos" id="platoForm" enctype="multipart/form-data" novalidate>
             <input type="hidden" name="save_plato" value="1">
             <?php if ($editId): ?><input type="hidden" name="id" value="<?= (int)$editId ?>"><?php endif; ?>
 
@@ -73,6 +73,18 @@ require 'app/views/partials/admin_top.php';
                         <label for="ingredientes">Ingredientes principales</label>
                         <input class="input" type="text" id="ingredientes" name="ingredientes" value="<?= htmlspecialchars($form['ingredientes']) ?>" placeholder="Separados por coma">
                         <?= $msg('ingredientes') ?>
+                    </div>
+
+                    <div class="field<?= $fe('imagen') ?>">
+                        <label for="imagen">Foto del plato</label>
+                        <div class="upload">
+                            <img id="imgPreview" src="<?= htmlspecialchars($form['imagen'] ?? 'assets/img/platos/default.svg') ?>" alt="">
+                            <div>
+                                <input type="file" id="imagen" name="imagen" accept="image/jpeg,image/png,image/webp">
+                                <div class="hint">JPG, PNG o WebP, máx. 2 MB. Si no subes una, se conserva la actual.</div>
+                            </div>
+                        </div>
+                        <?= $msg('imagen') ?>
                     </div>
                 </div>
 
@@ -148,7 +160,12 @@ require 'app/views/partials/admin_top.php';
                 <?php foreach ($platos as $pl): ?>
                     <tr>
                         <td class="muted"><?= $pl['id'] ?></td>
-                        <td><b><?= htmlspecialchars($pl['nombre']) ?></b></td>
+                        <td>
+                            <div class="thumb-row">
+                                <img src="<?= htmlspecialchars($pl['imagen'] ?: 'assets/img/platos/default.svg') ?>" alt="">
+                                <b><?= htmlspecialchars($pl['nombre']) ?></b>
+                            </div>
+                        </td>
                         <td>
                             <span class="tag <?= strtolower(strtr($pl['region'], ['í' => 'i'])) ?>"><?= htmlspecialchars($pl['region']) ?></span>
                             <span class="muted"> · <?= htmlspecialchars($pl['provincia'] ?? 'Sin provincia') ?></span>
@@ -188,6 +205,12 @@ require 'app/views/partials/admin_top.php';
     }
     ['inputPrecio', 'inputCosto', 'inputDescPro'].forEach(id => document.getElementById(id).addEventListener('input', calcular));
     calcular();
+
+    // Vista previa de la foto elegida (el servidor la valida de nuevo al guardar)
+    document.getElementById('imagen').addEventListener('change', e => {
+        const f = e.target.files[0];
+        if (f) document.getElementById('imgPreview').src = URL.createObjectURL(f);
+    });
 
     // Lista dependiente: al elegir región se cargan las provincias de esa región
     const selRegion = document.getElementById('selRegion');

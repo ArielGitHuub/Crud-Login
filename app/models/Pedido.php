@@ -10,18 +10,27 @@ class Pedido {
         $subtotal = 0.0;
         $costoTotal = 0.0;
 
-        foreach ($items as $item) {
-            $subtotal += ($item['precio'] * $item['cantidad']);
-            $costoTotal += ($item['costo'] * $item['cantidad']);
-        }
+        $descuento = 0.0;
 
-        // Reglas de negocio Core:
-        // Si usuario es Pro: 20% de descuento y costo de envío $0.00
-        // Si usuario es Free: sin descuento y costo de envío fijo $2.50
-        $descuento = $isPro ? ($subtotal * 0.20) : 0.0;
+        foreach ($items as $item) {
+            $linea = $item['precio'] * $item['cantidad'];
+            $subtotal += $linea;
+            $costoTotal += ($item['costo'] * $item['cantidad']);
+            // Descuento Pro: porcentaje propio de cada plato (campo descuento_pro del catálogo)
+            if ($isPro) {
+                $descuento += $linea * (($item['descuento_pro'] ?? 0) / 100);
+            }
+        }
+        $subtotal = round($subtotal, 2);
+        $descuento = round($descuento, 2);
+
+        // Reglas de negocio del Core:
+        // Total = Σ(precio × cantidad) − descuento Pro + envío  (envío $0.00 para Pro, $2.50 para Free)
+        // Ganancia = Total − Σ(costo × cantidad)
         $envio = $isPro ? 0.0 : 2.50;
-        $total = ($subtotal - $descuento) + $envio;
-        $ganancia = $total - $costoTotal;
+        $total = round(($subtotal - $descuento) + $envio, 2);
+        $costoTotal = round($costoTotal, 2);
+        $ganancia = round($total - $costoTotal, 2);
 
         $stmt = $this->db->prepare("INSERT INTO pedidos (usuario_id, sucursal_id, subtotal, descuento, envio, total, costo_total, ganancia, estado, fecha) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Entregado', datetime('now', 'localtime'))");

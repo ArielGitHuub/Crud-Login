@@ -15,13 +15,14 @@ $q = fn(array $extra) => 'index.php?' . http_build_query(array_filter(['action' 
     <title>Menú por región · Fuego Andino</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="assets/img/logo.svg">
     <link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body>
 
 <header class="site-nav">
     <div class="in">
-        <a class="logo" href="index.php?action=menu">Fuego <em>Andino</em></a>
+        <a class="logo" href="index.php?action=menu"><img src="assets/img/logo.svg" alt="">Fuego <em>Andino</em></a>
         <nav class="links">
             <a class="active" href="index.php?action=menu">Menú</a>
             <?php if (($userRol ?? '') === 'admin'): ?>
@@ -94,6 +95,7 @@ $q = fn(array $extra) => 'index.php?' . http_build_query(array_filter(['action' 
             $precioPro = $precioRegular * (1 - $descuento / 100);
         ?>
             <article class="dish <?= $regionClass($pl['region']) ?>">
+                <img class="photo" src="<?= htmlspecialchars($pl['imagen'] ?: 'assets/img/platos/default.svg') ?>" alt="<?= htmlspecialchars($pl['nombre']) ?>" loading="lazy">
                 <div class="stripe"></div>
                 <div class="body">
                     <div class="origin"><?= htmlspecialchars($pl['region']) ?><?= !empty($pl['provincia']) ? ' · ' . htmlspecialchars($pl['provincia']) : '' ?></div>
@@ -112,12 +114,16 @@ $q = fn(array $extra) => 'index.php?' . http_build_query(array_filter(['action' 
                         </div>
                         <small><?= $isPro ? '−' . (int)$descuento . '% Pro' : 'Con Pro: $' . number_format($precioPro, 2) ?></small>
                     </div>
-                    <form method="POST" action="index.php?action=ordenar">
+                    <?php if (empty($_SESSION['user_id'])): ?>
+                        <a class="btn" href="index.php?action=login">Inicia sesión para pedir</a>
+                    <?php else: ?>
+                    <form method="POST" action="index.php?action=ordenar" class="order">
                         <input type="hidden" name="plato_id" value="<?= $pl['id'] ?>">
                         <input type="hidden" name="sucursal_id" value="<?= $sucursalId ?>">
-                        <input type="hidden" name="cantidad" value="1">
+                        <input class="input qty" type="number" name="cantidad" value="1" min="1" max="20" aria-label="Cantidad">
                         <button type="submit" class="btn primary">Pedir</button>
                     </form>
+                    <?php endif; ?>
                 </div>
             </article>
         <?php endforeach; ?>

@@ -125,6 +125,9 @@ class Database {
 
         // Migración: platos.provincia_id (la columna 'region' se conserva sincronizada para menú y dashboard)
         $cols = array_column($this->pdo->query("PRAGMA table_info(platos)")->fetchAll(PDO::FETCH_ASSOC), 'name');
+        if (!in_array('imagen', $cols)) {
+            $this->pdo->exec("ALTER TABLE platos ADD COLUMN imagen TEXT");
+        }
         if (!in_array('provincia_id', $cols)) {
             $this->pdo->exec("ALTER TABLE platos ADD COLUMN provincia_id INTEGER REFERENCES provincias(id)");
         }
@@ -180,6 +183,20 @@ class Database {
             'Maito de Tilapia Amazónico' => 'Napo', 'Caldo de Carachama Tradicional' => 'Pastaza',
             'Chicha de Chonta y Yuca' => 'Morona Santiago',
         ];
+        // Ilustraciones incluidas para los platos del menú base
+        $imagenes = [
+            'Encebollado Mixto Especial' => 'encebollado', 'Seco de Chivo Tradicional' => 'seco-de-chivo',
+            'Bolón de Verde con Chicharrón y Queso' => 'bolon-de-verde', 'Ceviche de Camarón Manabita' => 'ceviche-de-camaron',
+            'Locro de Papa con Queso y Aguacate' => 'locro-de-papa', 'Hornado con Llapingachos' => 'hornado-con-llapingachos',
+            'Fritada Imbabureña Tradicional' => 'fritada-imbabure', 'Cevichocho con Tostado' => 'cevichocho',
+            'Maito de Tilapia Amazónico' => 'maito-de-tilapia', 'Caldo de Carachama Tradicional' => 'caldo-de-carachama',
+            'Chicha de Chonta y Yuca' => 'chicha-de-chonta',
+        ];
+        $updImg = $this->pdo->prepare("UPDATE platos SET imagen = ? WHERE nombre = ? AND imagen IS NULL");
+        foreach ($imagenes as $plato => $archivo) {
+            $updImg->execute(["assets/img/platos/$archivo.svg", $plato]);
+        }
+
         $upd = $this->pdo->prepare("UPDATE platos SET provincia_id = (SELECT id FROM provincias WHERE nombre = ?) WHERE nombre = ? AND provincia_id IS NULL");
         foreach ($origen as $plato => $prov) {
             $upd->execute([$prov, $plato]);

@@ -8,7 +8,7 @@ require_once 'app/controllers/PlatoController.php';
 require_once 'app/controllers/SucursalController.php';
 
 $db = (new Database())->connect();
-$action = $_GET['action'] ?? 'menu';
+$action = $_GET['action'] ?? 'login'; // la pantalla de entrada siempre es el login
 
 switch ($action) {
     case 'login':
@@ -62,8 +62,13 @@ switch ($action) {
         $controller->index();
         break;
 
+    case 'dashboard_data':
+        $controller = new DashboardController($db);
+        $controller->data();
+        break;
+
     default:
-        header('Location: index.php?action=menu');
+        header('Location: index.php?action=login');
         break;
 }
 ?>

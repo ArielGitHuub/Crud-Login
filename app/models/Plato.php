@@ -39,9 +39,10 @@ class Plato {
     }
 
     public function create($data) {
-        $stmt = $this->db->prepare("INSERT INTO platos (nombre, region, provincia_id, precio, costo, descuento_pro, activo, descripcion, ingredientes, tiempo_preparacion)
-            VALUES (:nombre, :region, :provincia_id, :precio, :costo, :descuento_pro, :activo, :descripcion, :ingredientes, :tiempo_preparacion)");
+        $stmt = $this->db->prepare("INSERT INTO platos (nombre, region, provincia_id, precio, costo, descuento_pro, activo, descripcion, ingredientes, tiempo_preparacion, imagen)
+            VALUES (:nombre, :region, :provincia_id, :precio, :costo, :descuento_pro, :activo, :descripcion, :ingredientes, :tiempo_preparacion, :imagen)");
         return $stmt->execute([
+            ':imagen' => $data['imagen'] ?? null,
             ':nombre' => $data['nombre'],
             ':region' => $data['region'],
             ':provincia_id' => $data['provincia_id'],
@@ -66,9 +67,11 @@ class Plato {
             activo = :activo, 
             descripcion = :descripcion, 
             ingredientes = :ingredientes, 
-            tiempo_preparacion = :tiempo_preparacion 
+            tiempo_preparacion = :tiempo_preparacion,
+            imagen = COALESCE(:imagen, imagen)
             WHERE id = :id");
         return $stmt->execute([
+            ':imagen' => $data['imagen'] ?? null,
             ':id' => $id,
             ':nombre' => $data['nombre'],
             ':region' => $data['region'],

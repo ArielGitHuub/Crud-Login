@@ -36,30 +36,34 @@ class MenuController {
     public function ordenar() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $userId = $_SESSION['user_id'] ?? null;
-            $sucursalId = (int)($_POST['sucursal_id'] ?? 1);
-            $platoId = (int)($_POST['plato_id'] ?? 1);
-            $cantidad = (int)($_POST['cantidad'] ?? 1);
+            // Solo usuarios registrados pueden pedir (los invitados únicamente consultan el menú)
+            if (!$userId) {
+                header('Location: index.php?action=login');
+                exit;
+            }
 
+            $sucursalId = (int)($_POST['sucursal_id'] ?? 0);
+            $platoId = (int)($_POST['plato_id'] ?? 0);
+            $cantidad = (int)($_POST['cantidad'] ?? 1);
+            $cantidad = max(1, min(20, $cantidad));
+
+            // Precios y costos salen siempre de la base de datos, nunca del formulario
             $plato = $this->platoModel->getById($platoId);
-            if (!$plato) {
+            $sucursal = $this->sucursalModel->getById($sucursalId);
+            if (!$plato || !$plato['activo'] || !$sucursal || !$sucursal['activa']) {
                 header('Location: index.php?action=menu');
                 exit;
             }
 
-            $userPlan = $_SESSION['plan'] ?? 'free';
-            $isPro = ($userPlan === 'pro');
-
-            // Si es invitado y quiere pedir, podemos crear usuario temporal o registrar con usuario demo
-            if (!$userId) {
-                $userId = 3; // Usuario Free por defecto
-            }
+            $isPro = (($_SESSION['plan'] ?? 'free') === 'pro');
 
             $items = [
                 [
                     'plato_id' => $plato['id'],
                     'cantidad' => $cantidad,
                     'precio' => (float)$plato['precio'],
-                    'costo' => (float)$plato['costo']
+                    'costo' => (float)$plato['costo'],
+                    'descuento_pro' => (float)$plato['descuento_pro']
                 ]
             ];
 
@@ -67,7 +71,7 @@ class MenuController {
 
             $_SESSION['mensaje_pedido'] = [
                 'tipo' => 'exito',
-                'texto' => "¡Pedido N°{$pedidoId} registrado exitosamente! Se procesó para la sucursal seleccionada con los beneficios de tu cuenta (" . ($isPro ? "Descuento Pro 20% y Envío Gratis" : "Cuenta Free") . ")."
+                'texto' => "¡Pedido N°{$pedidoId} registrado exitosamente! Se procesó para la sucursal seleccionada con los beneficios de tu cuenta (" . ($isPro ? "descuento Pro y envío gratis" : "cuenta Free, envío $2.50") . ")."
             ];
 
             header('Location: index.php?action=menu');
