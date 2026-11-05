@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireframes Core - Fuego Andino</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen p-6 md:p-12">
+    <div class="max-w-6xl mx-auto space-y-12">
+        
+        <!-- Header -->
+        <div class="text-center space-y-2">
+            <span class="text-xs font-bold tracking-widest text-blue-600 uppercase bg-blue-50 border border-blue-200 px-3 py-1 rounded-full">
+                Documento de Especificación Funcional • Sección 4.5
+            </span>
+            <h1 class="text-3xl font-extrabold text-slate-900">Wireframes del Core: Fuego Andino</h1>
+            <p class="text-slate-600 max-w-2xl mx-auto text-sm">
+                Diseños de interfaz de alta fidelidad correspondientes a los 3 pilares del Core: Dashboard Administrativo Base, Menú de Platos por Región, y Detalle/Gestión de Platos.
+            </p>
+        </div>
+
+        <!-- Wireframe 1 -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-4">
+            <div class="border-b border-slate-100 pb-4">
+                <span class="text-xs font-bold text-blue-600 uppercase tracking-wide">Wireframe 1 • Rol: Administrador</span>
+                <h2 class="text-xl font-bold text-slate-800">4.5.1. Dashboard Administrativo Base</h2>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                    En el apartado para la gestión y análisis del negocio, los administradores podrán consultar el rendimiento global de la franquicia mediante el dashboard administrativo base. En esta interfaz, el administrador puede filtrar los datos por sucursal específica y por período de tiempo (hoy, semana o mes). La pantalla presenta los indicadores clave de negocio (KPIs) requeridos por el Core: ventas totales consolidadas de pedidos no cancelados, ganancia neta total obtenida tras descontar el costo real de elaboración de los platos, y la cantidad de clientes registrados segmentados según su membresía (cuentas Free y cuentas Pro). Asimismo, se incluye una tabla con el ranking de los platos más y menos consumidos para facilitar la toma de decisiones operativas.
+                </p>
+            </div>
+            <div class="rounded-xl overflow-hidden border border-slate-200 shadow-inner bg-slate-50">
+                <img src="figura1_dashboard.png" alt="Figura 1. Interfaz para la visualización del dashboard administrativo base" class="w-full h-auto">
+            </div>
+            <p class="text-xs text-center text-slate-500 italic pt-2">
+                Figura 1. Interfaz para la visualización del dashboard administrativo base.
+            </p>
+        </section>
+
+        <!-- Wireframe 2 -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-4">
+            <div class="border-b border-slate-100 pb-4">
+                <span class="text-xs font-bold text-blue-600 uppercase tracking-wide">Wireframe 2 • Rol: Visitante / Cliente (Free y Pro)</span>
+                <h2 class="text-xl font-bold text-slate-800">4.5.2. Catálogo y Menú de Platos por Región</h2>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                    En la interfaz que se muestra a continuación, tanto los visitantes como los clientes registrados (Free y Pro) pueden explorar la oferta gastronómica ecuatoriana del restaurante a través del catálogo interactivo organizado por regiones geográficas (Costa, Sierra y Amazonía). La pantalla permite filtrar los platos mediante pestañas rápidas y visualizar el precio estándar junto con el precio promocional exclusivo para clientes con Plan Pro (descuento del 20% aplicado y beneficio de envío gratuito garantizado). Desde esta vista, el usuario puede seleccionar la sucursal de entrega más cercana, consultar los ingredientes principales de cada preparación culinaria y añadir platos a su orden de pedido.
+                </p>
+            </div>
+            <div class="rounded-xl overflow-hidden border border-slate-200 shadow-inner bg-slate-50">
+                <img src="figura2_catalogo_menu.png" alt="Figura 2. Interfaz para la consulta del menú de platos por región" class="w-full h-auto">
+            </div>
+            <p class="text-xs text-center text-slate-500 italic pt-2">
+                Figura 2. Interfaz para la consulta del menú de platos por región.
+            </p>
+        </section>
+
+        <!-- Wireframe 3 -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-4">
+            <div class="border-b border-slate-100 pb-4">
+                <span class="text-xs font-bold text-blue-600 uppercase tracking-wide">Wireframe 3 • Rol: Administrador</span>
+                <h2 class="text-xl font-bold text-slate-800">4.5.3. Detalle y Formulario de Gestión de Plato</h2>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                    En la interfaz que se muestra a continuación, los usuarios administradores podrán consultar, dar de alta y modificar el detalle de cada uno de los platos que conforman la carta gastronómica de la franquicia. El formulario permite parametrizar los datos fundamentales para las reglas de negocio del Core: la asignación de la región geográfica de procedencia (Costa, Sierra o Amazonía), el precio de venta al público, el costo real de elaboración (insumo indispensable para que el sistema calcule automáticamente la ganancia por pedido en el dashboard) y el porcentaje de descuento especial para usuarios con Plan Pro. Asimismo, permite registrar los ingredientes asociados a la receta y definir si el plato se encuentra activo en el menú.
+                </p>
+            </div>
+            <div class="rounded-xl overflow-hidden border border-slate-200 shadow-inner bg-slate-50">
+                <img src="figura3_detalle_plato.png" alt="Figura 3. Interfaz con el detalle y gestión de plato del catálogo" class="w-full h-auto">
+            </div>
+            <p class="text-xs text-center text-slate-500 italic pt-2">
+                Figura 3. Interfaz con el detalle y gestión de plato del catálogo.
+            </p>
+        </section>
+
+    </div>
+</body>
+</html>

@@ -2,26 +2,57 @@
 session_start();
 require_once 'config/database.php';
 require_once 'app/controllers/AuthController.php';
-require_once 'app/controllers/ItemController.php';
+require_once 'app/controllers/DashboardController.php';
+require_once 'app/controllers/MenuController.php';
+require_once 'app/controllers/PlatoController.php';
 
 $db = (new Database())->connect();
-$action = $_GET['action'] ?? 'login';
+$action = $_GET['action'] ?? 'menu';
 
 switch ($action) {
     case 'login':
         $controller = new AuthController($db);
         $controller->login();
         break;
+
     case 'logout':
         $controller = new AuthController($db);
         $controller->logout();
         break;
-    case 'crud':
-        $controller = new ItemController($db);
+
+    case 'switch_user':
+        $controller = new AuthController($db);
+        $controller->quickSwitch();
+        break;
+
+    case 'dashboard':
+        $controller = new DashboardController($db);
         $controller->index();
         break;
+
+    case 'menu':
+        $controller = new MenuController($db);
+        $controller->index();
+        break;
+
+    case 'ordenar':
+        $controller = new MenuController($db);
+        $controller->ordenar();
+        break;
+
+    case 'provincias':
+        $controller = new PlatoController($db);
+        $controller->provincias();
+        break;
+
+    case 'platos':
+    case 'crud':
+        $controller = new PlatoController($db);
+        $controller->index();
+        break;
+
     default:
-        header('Location: index.php?action=login');
+        header('Location: index.php?action=menu');
         break;
 }
 ?>

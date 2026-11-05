@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireframe - Dashboard Administrativo Base</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-100 p-8 min-h-screen flex items-center justify-center">
+
+    <!-- Browser Mockup Window / Wireframe Container -->
+    <div class="w-full max-w-5xl bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+        
+        <!-- Top Navigation Bar -->
+        <header class="bg-white border-b border-slate-200 px-8 py-3.5 flex items-center justify-between">
+            <div class="flex items-center space-x-8">
+                <!-- Brand / Logo -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-xl">🔥</span>
+                    <span class="font-bold text-slate-800 text-base tracking-tight">Fuego Andino</span>
+                    <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-medium border border-slate-200">Admin</span>
+                </div>
+
+                <!-- Nav links -->
+                <nav class="flex items-center space-x-6 text-sm">
+                    <a href="#" class="flex items-center space-x-2 text-blue-600 font-semibold border-b-2 border-blue-600 pb-1 -mb-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-2 text-slate-500 hover:text-slate-800 font-medium">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        <span>Catálogo de Platos</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-2 text-slate-500 hover:text-slate-800 font-medium">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                        <span>Sucursales</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-2 text-slate-500 hover:text-slate-800 font-medium">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                        <span>Usuarios</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- User Avatar & Dropdown -->
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-semibold text-xs flex items-center justify-center shadow-sm">
+                    AT
+                </div>
+                <div class="text-left hidden sm:block">
+                    <p class="text-xs font-semibold text-slate-800">Ariel Tejada</p>
+                    <p class="text-[10px] text-slate-500">Administrador General</p>
+                </div>
+                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="p-8 space-y-6">
+            
+            <!-- Page Header & Filters -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-2 border-b border-slate-100">
+                <div>
+                    <h1 class="text-xl font-bold text-slate-800">Dashboard Administrativo Base</h1>
+                    <p class="text-xs text-slate-500 mt-0.5">Indicadores de rentabilidad y demanda del menú consolidada</p>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 mb-1">Sucursal</label>
+                        <select class="text-xs border border-slate-300 rounded-lg px-3 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                            <option>Todas las sucursales (Consolidado)</option>
+                            <option>Sucursal Quito - La Mariscal</option>
+                            <option>Sucursal Guayaquil - Malecón</option>
+                            <option>Sucursal Cuenca - El Sagrario</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 mb-1">Período</label>
+                        <select class="text-xs border border-slate-300 rounded-lg px-3 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                            <option>Este Mes (Octubre 2026)</option>
+                            <option>Esta Semana</option>
+                            <option>Hoy</option>
+                        </select>
+                    </div>
+
+                    <div class="pt-4">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-4 py-1.5 rounded-lg transition shadow-sm flex items-center space-x-1.5">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            <span>Filtrar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI Metric Cards (Core Indicators) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <!-- KPI 1: Ventas Totales -->
+                <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm hover:border-slate-300 transition">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
+                        <span class="text-xs font-medium">Ventas Totales</span>
+                        <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-bold text-slate-800">$ 4,850.00</div>
+                    <p class="text-[11px] text-slate-400 mt-1">Σ(Pedidos no cancelados)</p>
+                </div>
+
+                <!-- KPI 2: Ganancia Total -->
+                <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm hover:border-slate-300 transition">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
+                        <span class="text-xs font-medium">Ganancia Total (Core)</span>
+                        <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-bold text-emerald-600">$ 2,180.50</div>
+                    <p class="text-[11px] text-slate-400 mt-1">Ventas − Costo Elaboración (45%)</p>
+                </div>
+
+                <!-- KPI 3: Clientes Registrados -->
+                <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm hover:border-slate-300 transition">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
+                        <span class="text-xs font-medium">Clientes Registrados</span>
+                        <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-bold text-slate-800">184</div>
+                    <div class="flex items-center space-x-2 mt-1 text-[11px]">
+                        <span class="text-slate-500 font-medium">112 Free</span>
+                        <span class="text-slate-300">•</span>
+                        <span class="text-amber-600 font-semibold">72 Pro (39%)</span>
+                    </div>
+                </div>
+
+                <!-- KPI 4: Pedidos No Cancelados -->
+                <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm hover:border-slate-300 transition">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
+                        <span class="text-xs font-medium">Pedidos Atendidos</span>
+                        <div class="w-7 h-7 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-bold text-slate-800">134</div>
+                    <p class="text-[11px] text-slate-400 mt-1">8 cancelados excluidos</p>
+                </div>
+            </div>
+
+            <!-- Tabular Breakdown: Platos Más y Menos Consumidos -->
+            <div class="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm">
+                <div class="px-5 py-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Demanda del Menú: Platos Más y Menos Consumidos</h2>
+                        <p class="text-[11px] text-slate-500">Unidades vendidas y rentabilidad por región culinaria ecuatoriana</p>
+                    </div>
+                    <span class="text-xs text-blue-600 font-medium cursor-pointer hover:underline">Ver catálogo completo →</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-slate-50/75 text-slate-600 border-b border-slate-200 font-semibold">
+                                <th class="py-2.5 px-4">Plato</th>
+                                <th class="py-2.5 px-4">Región</th>
+                                <th class="py-2.5 px-4 text-center">Uds. Vendidas</th>
+                                <th class="py-2.5 px-4 text-right">Precio Venta</th>
+                                <th class="py-2.5 px-4 text-right">Costo Elab.</th>
+                                <th class="py-2.5 px-4 text-right">Total Ventas</th>
+                                <th class="py-2.5 px-4 text-right">Ganancia Neta</th>
+                                <th class="py-2.5 px-4 text-center">Nivel de Demanda</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-slate-700">
+                            <!-- Fila 1: Más consumido -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3 px-4 font-semibold text-slate-900 flex items-center space-x-2">
+                                    <span class="text-amber-500 font-bold">1.</span>
+                                    <span>Encebollado Mixto Especial</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cyan-50 text-cyan-700 border border-cyan-200">Costa</span>
+                                </td>
+                                <td class="py-3 px-4 text-center font-bold text-slate-800">54</td>
+                                <td class="py-3 px-4 text-right">$ 6.50</td>
+                                <td class="py-3 px-4 text-right text-slate-500">$ 2.90</td>
+                                <td class="py-3 px-4 text-right font-medium">$ 351.00</td>
+                                <td class="py-3 px-4 text-right font-bold text-emerald-600">+$ 194.40</td>
+                                <td class="py-3 px-4 text-center">
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">Alta (Top 1)</span>
+                                </td>
+                            </tr>
+
+                            <!-- Fila 2 -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3 px-4 font-semibold text-slate-900 flex items-center space-x-2">
+                                    <span class="text-slate-400 font-bold">2.</span>
+                                    <span>Locro de Papa con Queso y Aguacate</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">Sierra</span>
+                                </td>
+                                <td class="py-3 px-4 text-center font-bold text-slate-800">48</td>
+                                <td class="py-3 px-4 text-right">$ 5.50</td>
+                                <td class="py-3 px-4 text-right text-slate-500">$ 2.20</td>
+                                <td class="py-3 px-4 text-right font-medium">$ 264.00</td>
+                                <td class="py-3 px-4 text-right font-bold text-emerald-600">+$ 158.40</td>
+                                <td class="py-3 px-4 text-center">
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">Alta</span>
+                                </td>
+                            </tr>
+
+                            <!-- Fila 3 -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3 px-4 font-semibold text-slate-900 flex items-center space-x-2">
+                                    <span class="text-slate-400 font-bold">3.</span>
+                                    <span>Maito de Tilapia en Hoja de Bijao</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Amazonía</span>
+                                </td>
+                                <td class="py-3 px-4 text-center font-bold text-slate-800">39</td>
+                                <td class="py-3 px-4 text-right">$ 8.50</td>
+                                <td class="py-3 px-4 text-right text-slate-500">$ 4.00</td>
+                                <td class="py-3 px-4 text-right font-medium">$ 331.50</td>
+                                <td class="py-3 px-4 text-right font-bold text-emerald-600">+$ 175.50</td>
+                                <td class="py-3 px-4 text-center">
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">Alta</span>
+                                </td>
+                            </tr>
+
+                            <!-- Fila 4: Menor consumo -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3 px-4 font-semibold text-slate-900 flex items-center space-x-2">
+                                    <span class="text-slate-400 font-bold">4.</span>
+                                    <span>Seco de Chivo Tradicional</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cyan-50 text-cyan-700 border border-cyan-200">Costa</span>
+                                </td>
+                                <td class="py-3 px-4 text-center font-bold text-slate-800">14</td>
+                                <td class="py-3 px-4 text-right">$ 7.50</td>
+                                <td class="py-3 px-4 text-right text-slate-500">$ 3.80</td>
+                                <td class="py-3 px-4 text-right font-medium">$ 105.00</td>
+                                <td class="py-3 px-4 text-right font-bold text-emerald-600">+$ 51.80</td>
+                                <td class="py-3 px-4 text-center">
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-700 border border-amber-200">Media</span>
+                                </td>
+                            </tr>
+
+                            <!-- Fila 5: Menos consumido -->
+                            <tr class="hover:bg-slate-50 transition bg-slate-50/30">
+                                <td class="py-3 px-4 font-semibold text-slate-900 flex items-center space-x-2">
+                                    <span class="text-slate-400 font-bold">5.</span>
+                                    <span>Cevichocho con Tostado</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">Sierra</span>
+                                </td>
+                                <td class="py-3 px-4 text-center font-bold text-slate-800">7</td>
+                                <td class="py-3 px-4 text-right">$ 3.50</td>
+                                <td class="py-3 px-4 text-right text-slate-500">$ 1.50</td>
+                                <td class="py-3 px-4 text-right font-medium">$ 24.50</td>
+                                <td class="py-3 px-4 text-right font-bold text-emerald-600">+$ 14.00</td>
+                                <td class="py-3 px-4 text-center">
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-rose-50 text-rose-700 border border-rose-200">Baja (Menor)</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

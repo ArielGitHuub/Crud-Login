@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireframe - Detalle y Gestión de Plato</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-100 p-8 min-h-screen flex items-center justify-center">
+
+    <!-- Browser Mockup Window / Wireframe Container -->
+    <div class="w-full max-w-5xl bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+        
+        <!-- Top Navigation Bar -->
+        <header class="bg-white border-b border-slate-200 px-8 py-3.5 flex items-center justify-between">
+            <div class="flex items-center space-x-8">
+                <!-- Brand / Logo -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-xl">🔥</span>
+                    <span class="font-bold text-slate-800 text-base tracking-tight">Fuego Andino</span>
+                    <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-medium border border-slate-200">Admin</span>
+                </div>
+
+                <!-- Nav links -->
+                <nav class="flex items-center space-x-6 text-sm">
+                    <a href="#" class="flex items-center space-x-2 text-slate-500 hover:text-slate-800 font-medium">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-2 text-blue-600 font-semibold border-b-2 border-blue-600 pb-1 -mb-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        <span>Catálogo de Platos</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-2 text-slate-500 hover:text-slate-800 font-medium">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                        <span>Sucursales</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-2 text-slate-500 hover:text-slate-800 font-medium">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                        <span>Usuarios</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- User Avatar & Dropdown -->
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-semibold text-xs flex items-center justify-center shadow-sm">
+                    AT
+                </div>
+                <div class="text-left hidden sm:block">
+                    <p class="text-xs font-semibold text-slate-800">Ariel Tejada</p>
+                    <p class="text-[10px] text-slate-500">Administrador General</p>
+                </div>
+                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="p-8 space-y-6">
+
+            <!-- Title & Actions Bar -->
+            <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+                <div class="flex items-center space-x-3">
+                    <h1 class="text-lg font-bold text-slate-800">Plato N°0012</h1>
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-cyan-50 text-cyan-700 border border-cyan-200">
+                        Costa Ecuatoriana
+                    </span>
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        Activo en Catálogo
+                    </span>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <button class="p-1.5 text-slate-400 hover:text-slate-600 rounded border border-slate-200 hover:bg-slate-50" title="Compartir enlace">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                    </button>
+                    <button class="p-1.5 text-rose-500 hover:text-rose-700 rounded border border-rose-200 hover:bg-rose-50" title="Eliminar plato">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <div class="flex space-x-6 border-b border-slate-200 text-xs">
+                <button class="font-semibold text-blue-600 border-b-2 border-blue-600 pb-2 -mb-px">
+                    Detalle del Plato
+                </button>
+                <button class="font-medium text-slate-500 hover:text-slate-800 pb-2">
+                    Ingredientes y Receta
+                </button>
+                <button class="font-medium text-slate-500 hover:text-slate-800 pb-2">
+                    Historial de Ventas (Sucursales)
+                </button>
+            </div>
+
+            <!-- Form: Two-Column Layout (Matching Teacher Figure 2) -->
+            <form class="space-y-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Left Column -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nombre del Plato</label>
+                            <input type="text" value="Encebollado Mixto Especial" class="w-full text-xs border border-slate-300 rounded-lg px-3 py-2 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Región de Origen (Core)</label>
+                            <select class="w-full text-xs border border-slate-300 rounded-lg px-3 py-2 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                <option selected>Costa (Gastronomía del Litoral)</option>
+                                <option>Sierra (Gastronomía Interandina)</option>
+                                <option>Amazonía (Gastronomía Oriental)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Descripción del Plato</label>
+                            <textarea rows="4" class="w-full text-xs border border-slate-300 rounded-lg px-3 py-2 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 leading-relaxed">Caldo tradicional de albacora fresca con camarón nacional, yuca tierna cocida, cebolla colorada curtida y chifles artesanales crocantes.</textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Ingredientes Principales (Separados por coma)</label>
+                            <input type="text" value="Albacora fresca, Camarón ecuatoriano, Yuca, Cebolla morada, Chifles" class="w-full text-xs border border-slate-300 rounded-lg px-3 py-2 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Estado en el Menú</label>
+                                <select class="w-full text-xs border border-slate-300 rounded-lg px-3 py-2 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                    <option selected>Activo (Visible al público)</option>
+                                    <option>Inactivo (Oculto)</option>
+                                    <option>Agotado temporalmente</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Tiempo de Preparación</label>
+                                <div class="relative">
+                                    <input type="text" value="00:15 hrs" class="w-full text-xs border border-slate-300 rounded-lg pl-3 pr-8 py-2 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                    <svg class="w-4 h-4 text-slate-400 absolute right-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Precio de Venta (PVP)</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-2 text-slate-400 text-xs">$</span>
+                                    <input type="text" value="6.50" class="w-full text-xs border border-slate-300 rounded-lg pl-7 pr-3 py-2 bg-white text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Costo Real de Elaboración</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-2 text-slate-400 text-xs">$</span>
+                                    <input type="text" value="2.90" class="w-full text-xs border border-slate-300 rounded-lg pl-7 pr-3 py-2 bg-white text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                </div>
+                                <span class="text-[10px] text-slate-400">Base para calcular Ganancia Core</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Descuento Plan Pro</label>
+                                <div class="relative">
+                                    <input type="text" value="20" class="w-full text-xs border border-slate-300 rounded-lg pl-3 pr-7 py-2 bg-white text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                    <span class="absolute right-3 top-2 text-slate-400 text-xs">%</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Precio Final Pro</label>
+                                <input type="text" value="$ 5.20 (Calculado)" disabled class="w-full text-xs border border-slate-200 bg-slate-50 text-slate-600 rounded-lg px-3 py-2 font-semibold">
+                            </div>
+                        </div>
+
+                        <!-- Calculation Helper Banner -->
+                        <div class="bg-blue-50/70 border border-blue-200 rounded-lg p-3 space-y-1">
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-blue-900 font-medium">Margen Unitario Normal:</span>
+                                <span class="font-bold text-emerald-600">+$ 3.60 (+55.4%)</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-blue-900 font-medium">Margen Unitario con Plan Pro:</span>
+                                <span class="font-bold text-emerald-600">+$ 2.30 (+44.2%)</span>
+                            </div>
+                            <p class="text-[10px] text-blue-700 pt-1 border-t border-blue-100">
+                                Fórmula aplicada: Ganancia = PVP − Costo Elaboración ($2.90)
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex items-center space-x-3 pt-4 border-t border-slate-200">
+                    <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-5 py-2.5 rounded-lg transition shadow-sm">
+                        Guardar Cambios
+                    </button>
+                    <button type="button" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-medium px-5 py-2.5 rounded-lg transition">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+
+        </main>
+    </div>
+
+</body>
+</html>
