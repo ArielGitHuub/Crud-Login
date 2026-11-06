@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <a href="https://youtu.be/acrYkLYtchI"><b>▶ Ver el video explicativo</b></a>
+  <a href="https://youtu.be/DVxxZZPPc10"><b>▶ Video Tarea 8: Administración MVC</b></a> &nbsp;·&nbsp; <a href="https://youtu.be/acrYkLYtchI"><b>▶ Video Tarea 3: CRUD / Login</b></a>
 </p>
 
 ---
@@ -62,7 +62,8 @@
 | **Referencias entre tablas con dropdowns**, sin ingresar claves foráneas a mano | ✅ | Platos: región → provincia (+ categoría). Sucursales: región → provincia → ciudad. Las listas se cargan por `fetch` desde `?action=provincias` y `?action=ciudades`, y el servidor vuelve a comprobar la relación. |
 | Código versionado en Git con README | ✅ | Este repositorio |
 | Deployado | ✅ | [https://fuego-andino-final.onrender.com](https://fuego-andino-final.onrender.com) · ver [Deploy](#9-deploy) |
-| Video en Loom/YouTube | ✅ | [youtu.be/acrYkLYtchI](https://youtu.be/acrYkLYtchI) |
+| Video explicando la administración (Tarea 8) | ✅ | [youtu.be/DVxxZZPPc10](https://youtu.be/DVxxZZPPc10) |
+| Video de la entrega anterior (Tarea 3: CRUD / Login) | ✅ | [youtu.be/acrYkLYtchI](https://youtu.be/acrYkLYtchI) |
 
 > **Qué se valida en el servidor y por qué:** precio, costo y descuento son los datos sensibles del core, porque de ellos sale la ganancia que muestra el dashboard. Un plato con pérdida o con un descuento fuera de rango distorsionaría todos los indicadores, así que el servidor lo rechaza aunque el navegador envíe datos manipulados.
 
