@@ -25,14 +25,13 @@
 2. [Cumplimiento de la tarea](#2-cumplimiento-de-la-tarea)
 3. [Reglas de negocio](#3-reglas-de-negocio)
 4. [Arquitectura](#4-arquitectura)
-5. [Modelo de datos](#5-modelo-de-datos)
-6. [Seguridad](#6-seguridad)
-7. [Instalación y ejecución](#7-instalación-y-ejecución)
-8. [Cuentas de prueba](#8-cuentas-de-prueba)
-9. [Rutas](#9-rutas)
-10. [Deploy](#10-deploy)
-11. [Créditos de las fotos](#11-créditos-de-las-fotos)
-12. [Autor y licencia](#12-autor-y-licencia)
+5. [Seguridad](#5-seguridad)
+6. [Instalación y ejecución](#6-instalación-y-ejecución)
+7. [Cuentas de prueba](#7-cuentas-de-prueba)
+8. [Rutas](#8-rutas)
+9. [Deploy](#9-deploy)
+10. [Créditos de las fotos](#10-créditos-de-las-fotos)
+11. [Autor y licencia](#11-autor-y-licencia)
 
 ---
 
@@ -62,7 +61,7 @@
 | **Validación en back-end** de un dato sensible antes de guardar | ✅ | `PlatoController::validar()` — precio, costo y descuento (el costo debe ser menor que el precio, el precio Pro nunca baja del costo, rangos, nombre único). También valida la foto subida. |
 | **Referencias entre tablas con dropdowns**, sin ingresar claves foráneas a mano | ✅ | Platos: región → provincia (+ categoría). Sucursales: región → provincia → ciudad. Las listas se cargan por `fetch` desde `?action=provincias` y `?action=ciudades`, y el servidor vuelve a comprobar la relación. |
 | Código versionado en Git con README | ✅ | Este repositorio |
-| Deployado | ⏳ | Ver [Deploy](#10-deploy) · **URL:** _pendiente de completar_ |
+| Deployado | ✅ | [https://fuego-andino-final.onrender.com](https://fuego-andino-final.onrender.com) · ver [Deploy](#9-deploy) |
 | Video en Loom/YouTube | ✅ | [youtu.be/acrYkLYtchI](https://youtu.be/acrYkLYtchI) |
 
 > **Qué se valida en el servidor y por qué:** precio, costo y descuento son los datos sensibles del core, porque de ellos sale la ganancia que muestra el dashboard. Un plato con pérdida o con un descuento fuera de rango distorsionaría todos los indicadores, así que el servidor lo rechaza aunque el navegador envíe datos manipulados.
@@ -116,47 +115,7 @@ tarea3_mvc/
 
 ---
 
-## 5. Modelo de datos
-
-```mermaid
-erDiagram
-    REGIONES ||--o{ PROVINCIAS : tiene
-    PROVINCIAS ||--o{ CIUDADES : tiene
-    PROVINCIAS ||--o{ PLATOS : "origen de"
-    CATEGORIAS ||--o{ PLATOS : clasifica
-    CIUDADES ||--o{ SUCURSALES : ubica
-    USERS ||--o{ PEDIDOS : realiza
-    SUCURSALES ||--o{ PEDIDOS : recibe
-    PEDIDOS ||--|{ DETALLE_PEDIDOS : contiene
-    PLATOS ||--o{ DETALLE_PEDIDOS : "se vende en"
-
-    PLATOS {
-        int id PK
-        text nombre
-        real precio
-        real costo
-        real descuento_pro
-        int provincia_id FK
-        int categoria_id FK
-        text imagen
-    }
-    PEDIDOS {
-        int id PK
-        real subtotal
-        real descuento
-        real envio
-        real total
-        real ganancia
-        text estado
-        datetime fecha
-    }
-```
-
-La base `data.sqlite` **se crea sola** la primera vez que se abre el sitio (esquema, migraciones para bases antiguas y datos de ejemplo). Por eso no está versionada.
-
----
-
-## 6. Seguridad
+## 5. Seguridad
 
 - **Validación en servidor** de todos los formularios (no se confía en JavaScript).
 - **Sentencias preparadas (PDO)** en todas las consultas que reciben datos externos.
@@ -172,7 +131,7 @@ La base `data.sqlite` **se crea sola** la primera vez que se abre el sitio (esqu
 
 ---
 
-## 7. Instalación y ejecución
+## 6. Instalación y ejecución
 
 **Requisitos:** PHP 8.1 o superior con la extensión `pdo_sqlite` (viene activada por defecto).
 
@@ -186,7 +145,7 @@ Abre <http://localhost:8000>. No hay que instalar dependencias ni crear la base 
 
 ---
 
-## 8. Cuentas de prueba
+## 7. Cuentas de prueba
 
 Todas usan la contraseña **`1234`**.
 
@@ -202,7 +161,7 @@ El login también tiene botones de **acceso rápido** (Administrador, Cliente Pr
 
 ---
 
-## 9. Rutas
+## 8. Rutas
 
 Todas se acceden como `index.php?action=<ruta>`.
 
@@ -218,7 +177,7 @@ Todas se acceden como `index.php?action=<ruta>`.
 
 ---
 
-## 10. Deploy
+## 9. Deploy
 
 PHP necesita un servidor con soporte PHP; `php -S` es solo para desarrollo. El repositorio incluye un `Dockerfile` (`php:8.3-apache`), así que funciona en [Render](https://render.com), Railway o cualquier servicio que despliegue contenedores.
 
@@ -230,11 +189,11 @@ PHP necesita un servidor con soporte PHP; `php -S` es solo para desarrollo. El r
 
 > En el plan gratuito el disco es temporal: los datos creados se reinician al redesplegar, pero la base se regenera sola con los datos de ejemplo.
 
-- **URL desplegada:** _pendiente de completar_
+- **URL desplegada:** <https://fuego-andino-final.onrender.com>
 
 ---
 
-## 11. Créditos de las fotos
+## 10. Créditos de las fotos
 
 Las fotos de los platos son **reales** y provienen de [Wikimedia Commons](https://commons.wikimedia.org), con licencias libres que exigen atribución. También se muestran en la página *Nosotros* del sitio. El archivo `assets/img/creditos.json` guarda estos datos.
 
@@ -258,7 +217,7 @@ Las fotos fueron reducidas de tamaño para la web. El código fuente es MIT; las
 
 ---
 
-## 12. Autor y licencia
+## 11. Autor y licencia
 
 **Ariel Tejada** — Ingeniería de Software, Universidad de Las Américas (UDLA). Asignatura: Ingeniería Web.
 
